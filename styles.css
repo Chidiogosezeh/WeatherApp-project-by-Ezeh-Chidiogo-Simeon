@@ -1,0 +1,377 @@
+/* =========================================================
+   Remove default browser spacing and use border-box sizing
+   everywhere so padding/border don't add to element widths.
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   Page base styles
+   ========================================================= */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+}
+
+/* Centered app container that wraps every section */
+main {
+  width: 100%;
+  padding: 8px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   HEADER
+   Dark blue title bar at the very top of the app.
+   ========================================================= */
+.heading {
+  background-color: #1a3c5e;
+  color: white;
+  padding: 16px 12px 30px 10px;
+  display: flex;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 18px 18px 0 0; /* rounded only on top corners */
+  margin-bottom: 5px;
+}
+
+/* =========================================================
+   SEARCH BAR
+   Text input + search button for manually searching a city.
+   ========================================================= */
+.search-container {
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 0 4px 0 4px;
+}
+
+.search-input {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+input {
+  flex: 1; /* input takes up all space not used by the button */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+button {
+  padding: 8px 20px;
+  background-color: #2e86ab;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #1a3c5e;
+}
+
+/* Error message shown when a city search fails or the input is empty */
+.error {
+  color: red;
+  display: none;
+}
+
+/* =========================================================
+   SEARCH HISTORY (feature)
+   Row of quick-access buttons showing the last 5 cities the
+   user searched for. Buttons are generated dynamically in
+   project.js (renderHistory) and persisted via localStorage.
+   ========================================================= */
+.history-container {
+  display: flex;
+  flex-wrap: wrap; /* wrap to a new line if there isn't enough room */
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.history-btn {
+  padding: 5px 12px;
+  font-size: 13px;
+  background-color: white;
+  color: #2e86ab;
+  border: 1px solid #2e86ab;
+  border-radius: 14px; /* pill shape */
+}
+
+.history-btn:hover {
+  background-color: #2e86ab;
+  color: white;
+}
+
+/* Wrapper that holds the history buttons + the "Clear history" link.
+   Only shown once there's at least one saved city (toggled via JS). */
+.history-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Small text-style "clear" action, kept visually lighter than the
+   history buttons since it's a destructive/secondary action. */
+.clear-history-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 12px;
+  text-decoration: underline;
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.clear-history-btn:hover {
+  color: red;
+  background: none;
+}
+
+/* =========================================================
+   WEATHER RESULT (HERO) SECTION
+   The big blue card showing current conditions: icon,
+   location, temperature, and short description.
+   ========================================================= */
+.weather-result-section {
+  background-color: #2e86ab;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  border-radius: 8px;
+  margin: 5px;
+}
+
+.weather-result-container {
+  line-height: 35px;
+  letter-spacing: 2px;
+}
+
+.weather-result-icon {
+  color: yellow;
+  font-size: larger;
+  font-style: bolder;
+}
+
+.location-result {
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.temperature-result {
+  font-size: 43px;
+  font-weight: 650;
+}
+
+.weather-comment {
+  font-size: 13px;
+  color: rgb(230, 215, 215);
+}
+
+/* =========================================================
+   °C / °F UNIT TOGGLE (feature)
+   Two small buttons inside the hero card that switch the
+   displayed temperature unit without re-fetching data.
+   The "active" class highlights the currently selected unit.
+   ========================================================= */
+.unit-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.unit-btn {
+  padding: 4px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.unit-btn.active {
+  background-color: white;
+  color: #2e86ab;
+  font-weight: 700;
+}
+
+.unit-btn:hover {
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Active button keeps its white background on hover too,
+   so it doesn't look like it lost its "selected" state. */
+.unit-btn.active:hover {
+  background-color: white;
+}
+
+/* =========================================================
+   ANIMATED WEATHER ICON (feature)
+   script.js assigns one of these animation classes to the
+   hero weather icon based on the current condition code
+   (e.g. spinning sun for clear skies, bouncing drops for
+   rain).
+   ========================================================= */
+
+/* Make sure the icon behaves as a block so transforms
+   (rotate/translate/scale) apply correctly. */
+.weather-result-icon i {
+  display: inline-block;
+}
+
+/* Continuous slow rotation — used for "Clear Sky" (sun). */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Up-and-down bounce — used for rain/drizzle/showers. */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Gentle side-to-side sway — used for clouds/snow drifting. */
+@keyframes drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+/* Slow fade + scale pulse — used for fog rolling in and out. */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.08); }
+}
+
+/* Quick flicker near the end of each cycle — used for thunderstorms,
+   mimicking a lightning flash. */
+@keyframes flash {
+  0%, 90%, 100% { opacity: 1; }
+  92%, 96% { opacity: 0.2; }
+}
+
+.icon-spin {
+  animation: spin 8s linear infinite;
+}
+
+.icon-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.icon-drift {
+  animation: drift 2.5s ease-in-out infinite;
+}
+
+.icon-pulse {
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+.icon-flash {
+  animation: flash 3s ease-in-out infinite;
+}
+
+/* =========================================================
+   WEATHER DETAILS SECTION
+   Three-column row showing humidity, wind, and UV index.
+   ========================================================= */
+.weather-details-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin: 0 5px 10px 5px;
+  padding: 15px 0 20px 0;
+}
+
+.weather-details {
+  flex: 1; /* each of the 3 columns takes equal width */
+  text-align: center;
+}
+
+/* Vertical divider line between columns (not applied to the last one) */
+.detail {
+  border-right: 1px solid #ccc;
+}
+
+.weather-details-label {
+  color: #a89e9e;
+  margin-bottom: 12px;
+}
+
+.weather-details-value {
+  color: #1a3c5e;
+  font-weight: 750;
+}
+
+/* =========================================================
+   5-DAY FORECAST SECTION
+   List of rows, one per upcoming day, each showing an icon
+   and a high/low temperature pair. Rows are rebuilt
+   dynamically by script.js (displayForecast).
+   ========================================================= */
+.forecast-container {
+  margin: 0 5px 10px 5px;
+}
+
+.forecast-container > p {
+  color: #a89e9e;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.forecast-weekday {
+  display: flex;
+  flex-direction: column;
+}
+
+.forecast-container-row {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ccc;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  color: #1a3c5e;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.forecast-container-row:hover {
+  background-color: white;
+}
+
+/* Day name (e.g. "Today", "Tuesday") aligned to the left */
+.forecast-container-row > p {
+  flex: 1;
+  text-align: left;
+}
+
+/* Weather icon for the day, also left-aligned within its own space */
+.forecast-container-row i {
+  flex: 1;
+  text-align: left;
+}
+
+/* The low-temperature value (second <p>) is shown in a muted gray
+   to visually de-emphasize it next to the high temperature. */
+.forecast-temperature p:last-child {
+  font-size: 12px;
+  color: #a89e9e;
+}

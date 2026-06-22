@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Font Awesome: used for generic icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Weather Icons: used for the animated weather condition icons (sun, rain, snow, etc.) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+
+    <title>Weather App</title>
+  </head>
+  <body>
+    <main>
+      <!-- ===================== Header Section ===================== -->
+      <!-- Simple title bar at the top of the app -->
+      <header>
+        <div class="heading" id="heading">
+          <i class="fa-solid fa-cloud"></i>
+          <p>Weather App</p>
+        </div>
+      </header>
+
+      <!-- ===================== Search City Section ===================== -->
+      <!-- Lets the user manually search for a city's weather -->
+      <section class="search-container">
+        <div class="search-input">
+          <input type="text" id="search" placeholder="Enter City" />
+          <button id="searchButton">Search</button>
+        </div>
+
+        <!-- Hidden by default; shown via JavaScript when a search fails or input is empty -->
+        <div class="error" id="errorPopup">Please enter correct city.</div>
+
+        <!--
+          Search History (feature):
+          Populated dynamically by script.js with buttons for the last 5
+          cities the user has searched for (stored in localStorage).
+          Clicking a city button re-runs the search for that city.
+          The "Clear" button wipes the saved history on demand.
+          Starts empty — JS fills it in on page load and after every search.
+        -->
+        <div class="history-wrapper" id="historyWrapper" style="display: none">
+          <div class="history-container" id="historyContainer"></div>
+          <button
+            id="clearHistoryButton"
+            class="clear-history-btn"
+            type="button"
+          >
+            Clear history
+          </button>
+        </div>
+      </section>
+
+      <!-- ===================== Weather Result Section ===================== -->
+      <section class="weather-result-section">
+        <div class="weather-result-container">
+          <!--
+            °C / °F Unit Toggle (feature):
+            Two buttons that switch the displayed temperature unit.
+            JS keeps the last-fetched weather data in memory and just
+            re-renders it in the new unit — no new API call is made.
+          -->
+          <div class="unit-toggle">
+            <button id="unitC" class="unit-btn active">°C</button>
+            <button id="unitF" class="unit-btn">°F</button>
+          </div>
+
+          <!--Animated Weather Icon (feature)-->
+          <div class="weather-result-icon" id="weatherIcon">
+            <i class="wi wi-day-sunny"></i>
+          </div>
+
+          <!-- City + country name, filled in by JS after a successful fetch -->
+          <div><p class="location-result" id="location">Lagos, Nigeria</p></div>
+
+          <!-- Current temperature, formatted in whichever unit is active -->
+          <div>
+            <p class="temperature-result" id="temperatureResult">32°C</p>
+          </div>
+
+          <!-- Short text description + "feels like" temperature -->
+          <div>
+            <p class="weather-comment" id="weatherComment">
+              Sunny &#183; Feels like 36°C
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== Weather Details Section ===================== -->
+      <section class="weather-details-section">
+        <div class="weather-details detail">
+          <p class="weather-details-label">Humidity</p>
+          <p class="weather-details-value" id="weatherHumidityValue">78%</p>
+        </div>
+
+        <div class="weather-details detail">
+          <p class="weather-details-label">Wind</p>
+          <p class="weather-details-value" id="weatherWindValue">14 km/h</p>
+        </div>
+
+        <div class="weather-details">
+          <p class="weather-details-label">UV Index</p>
+          <p class="weather-details-value" id="weatherUvIndexValue">High</p>
+        </div>
+      </section>
+
+      <!-- ===================== 5-Day Forecast Section ===================== -->
+      <!--
+        Static placeholder rows below. JS clears this container and rebuilds
+        it dynamically (#forecastBox) once real forecast data is fetched,
+        so the markup here is only what's briefly visible before JS runs.
+      -->
+      <section class="forecast-container">
+        <p>5-DAY FORECAST</p>
+        <div class="forecast-weekday" id="forecastBox">
+          <div class="forecast-container-row">
+            <p>Today</p>
+            <i class="wi wi-day-sunny"></i>
+            <div class="forecast-temperature">
+              <p>34°</p>
+              <p>27°</p>
+            </div>
+          </div>
+
+          <div class="forecast-container-row">
+            <p>Tuesday</p>
+            <i class="fa-solid fa-cloud"></i>
+            <div class="forecast-temperature">
+              <p>31°</p>
+              <p>25°</p>
+            </div>
+          </div>
+
+          <div class="forecast-container-row">
+            <p>Wednesday</p>
+            <i class="fa-solid fa-cloud-rain"></i>
+            <div class="forecast-temperature">
+              <p>28°</p>
+              <p>24°</p>
+            </div>
+          </div>
+
+          <div class="forecast-container-row">
+            <p>Thursday</p>
+            <i class="fa-solid fa-cloud-rain"></i>
+            <div class="forecast-temperature">
+              <p>27°</p>
+              <p>23°</p>
+            </div>
+          </div>
+
+          <div class="forecast-container-row">
+            <p>Friday</p>
+            <i class="wi wi-day-sunny"></i>
+            <div class="forecast-temperature">
+              <p>33°</p>
+              <p>26°</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
